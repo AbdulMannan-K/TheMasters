@@ -18,6 +18,30 @@ class App extends StatelessWidget {
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,
         splashFactory: InkSparkle.splashFactory,
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          extendedTextStyle: TextStyle(
+            letterSpacing: .5,
+            fontFamily: 'google-sans',
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        tabBarTheme: TabBarTheme(
+          labelStyle: const TextStyle(
+            letterSpacing: 1,
+            fontFamily: 'google-sans',
+            fontWeight: FontWeight.bold,
+          ),
+          unselectedLabelColor: Colors.grey.shade700,
+          unselectedLabelStyle: const TextStyle(fontFamily: 'google-sans'),
+        ),
+        navigationRailTheme: const NavigationRailThemeData(
+          unselectedLabelTextStyle: TextStyle(fontFamily: 'google-sans'),
+        ),
+        navigationBarTheme: NavigationBarThemeData(
+          labelTextStyle: MaterialStateProperty.all(
+            const TextStyle(fontFamily: 'google-sans'),
+          ),
+        ),
         inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(),
         ),

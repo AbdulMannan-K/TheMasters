@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class ResponsiveBodyResult {
-  const ResponsiveBodyResult({this.body, this.floatingActionButton});
+  const ResponsiveBodyResult({
+    this.body,
+    this.appBar,
+    this.floatingActionButton,
+  });
 
   final Widget? body;
+  final PreferredSizeWidget? appBar;
   final Widget? floatingActionButton;
 }
 

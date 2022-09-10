@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_masters/Models/CustomerHandler.dart';
+import 'package:the_masters/src/widgets/appbar_search.dart';
 import 'package:the_masters/src/widgets/responsive_body.dart';
 
 import 'customer_form.dart';
@@ -15,8 +16,12 @@ class CustomersView extends ResponsiveBody {
   @override
   ResponsiveBodyResult buildSmall(BuildContext context) {
     return ResponsiveBodyResult(
-      body: ListView.builder(
+      appBar: AppBarSearch(
+        searchHint: 'Type to search customers',
+      ),
+      body: ListView.separated(
         itemCount: customers.length * 10,
+        separatorBuilder: (_, __) => const Divider(height: 0, indent: 18),
         itemBuilder: (context, index) {
           final customer = customers[index % customers.length];
           return ListTile(
@@ -27,8 +32,8 @@ class CustomersView extends ResponsiveBody {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.add_rounded),
-        label: const Text('Add New'),
+        icon: const Icon(Icons.person_add_alt),
+        label: const Text('New Customer'),
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const CustomerFormSmall(id: 0),
         )),

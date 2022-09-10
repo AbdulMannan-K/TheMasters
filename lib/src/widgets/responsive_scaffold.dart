@@ -47,7 +47,7 @@ class ResponsiveScaffold extends StatelessWidget {
 
       return Scaffold(
         body: body,
-        appBar: AppBar(),
+        appBar: result?.appBar,
         bottomNavigationBar: bottomNavigationBar,
         floatingActionButton: result?.floatingActionButton,
       );
