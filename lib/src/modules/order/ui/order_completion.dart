@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_masters/src/modules/order/models/order.dart';
 import 'package:the_masters/src/modules/order/repository/order_repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderCompletion extends StatefulWidget {
   const OrderCompletion({super.key, required this.order});
@@ -21,7 +22,17 @@ class _OrderCompletionState extends State<OrderCompletion> {
         title: Text('Order # ${widget.order.number}'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              final Uri smsLaunchUri = Uri(
+                scheme: 'sms',
+                path: widget.order.customer.contactNumbers?.first,
+                queryParameters: <String, String>{
+                  'body':
+                      'Your Order number ${widget.order.number} of ${widget.order.items.toString()} = has been completed.\nYour total Price is ${widget.order.total}\nThe Masters',
+                },
+              );
+              launchUrl(smsLaunchUri);
+            },
             icon: const Icon(Icons.send),
           )
         ],
