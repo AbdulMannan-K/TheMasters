@@ -16,6 +16,10 @@ class AppBarSearch extends AppBar {
               fillColor: Colors.white,
               border: InputBorder.none,
               prefixIcon: const Icon(Icons.search_rounded),
+              suffixIcon: GestureDetector(
+                onTap: () => controller?.clear(),
+                child: const Icon(Icons.clear_rounded),
+              ),
             ),
           ),
         );

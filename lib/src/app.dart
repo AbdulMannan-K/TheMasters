@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:the_masters/src/base/data.dart';
 import 'package:the_masters/src/modules/home_page.dart';
 
 class App extends StatelessWidget {
   static Future<void> initializeAndRun() async {
+    await DBClient.initialize();
+
     return runApp(const App._());
   }
 

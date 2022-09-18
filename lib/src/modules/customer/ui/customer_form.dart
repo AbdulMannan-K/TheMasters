@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:the_masters/src/modules/customer/customer.dart';
+import 'package:the_masters/src/modules/customer/model/customer.dart';
+import 'package:the_masters/src/modules/customer/repository/customer_repository.dart';
 
 class CustomerFormSmall extends StatefulWidget {
-  const CustomerFormSmall({super.key, required this.id});
+  const CustomerFormSmall({super.key, this.customer});
 
-  final int id;
+  final Customer? customer;
 
   @override
   State<CustomerFormSmall> createState() => _CustomerFormSmallState();
 }
 
 class _CustomerFormSmallState extends State<CustomerFormSmall> {
-  final key = GlobalKey<AnimatedListState>();
+  final key = GlobalKey<FormState>();
+
   final builder = CustomerBuilder();
+  final repository = CustomerRepository();
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.customer != null) {
+      builder.fill(widget.customer!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +33,7 @@ class _CustomerFormSmallState extends State<CustomerFormSmall> {
     return Scaffold(
       appBar: AppBar(title: const Text('New Customer')),
       body: Form(
+        key: key,
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: _CustomerForm(builder),
@@ -30,17 +43,49 @@ class _CustomerFormSmallState extends State<CustomerFormSmall> {
         Padding(
           padding: const EdgeInsets.all(5),
           child: TextButton(
+            onPressed: handleSubmit,
             style: TextButton.styleFrom(
-              backgroundColor: theme.primaryColor,
               foregroundColor: theme.canvasColor,
+              backgroundColor: theme.primaryColor,
               minimumSize: const Size.fromHeight(50),
+              textStyle: const TextStyle(
+                letterSpacing: 1,
+                fontFamily: 'google-sans',
+                fontWeight: FontWeight.w600,
+              ),
             ),
             child: const Text('Submit'),
-            onPressed: () {},
           ),
         )
       ],
     );
+  }
+
+  void handleSubmit() async {
+    if (!(key.currentState?.validate() ?? false)) return;
+
+    key.currentState?.save();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Row(
+          children: const [CircularProgressIndicator(), Text('Loading')],
+        ),
+      ),
+    );
+
+    var customer = builder.build();
+    if (customer.id.isEmpty) {
+      customer = await repository.create(builder.build());
+    } else {
+      customer = await repository.update(builder.build());
+    }
+
+    if (mounted) {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop(customer);
+    }
   }
 }
 
@@ -61,10 +106,11 @@ class _CustomerFormState extends State<_CustomerForm> {
     return CustomScrollView(slivers: [
       SliverToBoxAdapter(
         child: TextFormField(
+          initialValue: widget.builder.name,
+          onSaved: (value) => widget.builder.name = value,
           decoration: const InputDecoration(label: Text('Name')),
         ),
       ),
-
       SliverPadding(
         padding: const EdgeInsets.only(top: 20, bottom: 10),
         sliver: SliverToBoxAdapter(
